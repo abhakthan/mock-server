@@ -92,6 +92,35 @@ mockClient("localhost", 1080).mockAnyResponse(
 
 });
 
+// Get Questions (for Failure)
+mockClient("localhost", 1080).mockAnyResponse(
+{
+  "httpRequest": {
+    "method": "POST",
+    "path": "/usidentityfraudservicev2",
+    "headers": [],
+    "body": {
+      "type": "XPATH",
+      "value": "//*[local-name()='InitialRequest']//*[local-name()='Address']//*[local-name()='ZIP'] = '20001'"
+    }
+  },"httpResponse": {
+    "statusCode": 200,
+    "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><InitialResponse xmlns=\"http://eid.equifax.com/soap/schema/usidentityfraudservice/v2\" xmlns:ns2=\"http://eid.equifax.com/soap/schema/identityfraudservice/v2\" transactionKey=\"1122334455667788\" transactionStatus=\"RESUBMIT\"><ProductResponses><IdentityVerificationAndProofing productStatus=\"RESUBMIT\"><IdentityProofing><Quiz quizId=\"1\"><ns2:Question questionId=\"1\"><ns2:QuestionText>Your credit file indicates you may have a mortgage loan, opened in or around May 1992. Who is the credit provider for this account?</ns2:QuestionText><ns2:AnswerChoice answerId=\"1\" correctAnswer=\"false\">MAGNA FUNDING CORPORATION</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"2\" correctAnswer=\"false\">REGIONS MORTGAGE INC</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"3\" correctAnswer=\"false\">STATE FARM BANK</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"4\" correctAnswer=\"false\">UNITED FUNDING MORTGAGE LOAN CORPORATION</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"5\" correctAnswer=\"true\">NONE OF THE ABOVE</ns2:AnswerChoice></ns2:Question><ns2:Question questionId=\"2\"><ns2:QuestionText>What is your total scheduled monthly payment for the above-referenced mortgage?</ns2:QuestionText><ns2:AnswerChoice answerId=\"1\" correctAnswer=\"false\">$25 - $124</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"2\" correctAnswer=\"false\">$125 - $224</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"3\" correctAnswer=\"false\">$225 - $324</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"4\" correctAnswer=\"false\">$325 - $424</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"5\" correctAnswer=\"true\">NONE OF THE ABOVE</ns2:AnswerChoice></ns2:Question><ns2:Question questionId=\"3\"><ns2:QuestionText>Your credit file indicates you may have an auto loan/lease, opened in or around September 2007. Who is the credit provider for this account?</ns2:QuestionText><ns2:AnswerChoice answerId=\"1\" correctAnswer=\"false\">E-LOAN</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"2\" correctAnswer=\"false\">INFINITI FINANCE SERVICES     </ns2:AnswerChoice><ns2:AnswerChoice answerId=\"3\" correctAnswer=\"false\">PARKWAY WEST CHEVROLET</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"4\" correctAnswer=\"true\">THE TORONTO-DOMINION BANK</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"5\" correctAnswer=\"false\">NONE OF THE ABOVE</ns2:AnswerChoice></ns2:Question><ns2:Question questionId=\"4\"><ns2:QuestionText>What is the total monthly payment for the above-referenced account?</ns2:QuestionText><ns2:AnswerChoice answerId=\"1\" correctAnswer=\"false\">$75 - $124</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"2\" correctAnswer=\"false\">$125 - $174</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"3\" correctAnswer=\"false\">$175 - $224</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"4\" correctAnswer=\"true\">$225 - $274</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"5\" correctAnswer=\"false\">NONE OF THE ABOVE</ns2:AnswerChoice></ns2:Question><ns2:Question questionId=\"5\"><ns2:QuestionText>On which of the following streets have you lived?</ns2:QuestionText><ns2:AnswerChoice answerId=\"1\" correctAnswer=\"false\">LARK CT</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"2\" correctAnswer=\"false\">LLOYD DR SE</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"3\" correctAnswer=\"false\">LOVERS LN NE</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"4\" correctAnswer=\"false\">SUE LN</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"5\" correctAnswer=\"true\">NONE OF THE ABOVE</ns2:AnswerChoice></ns2:Question><ns2:Question questionId=\"6\"><ns2:QuestionText>Which of the following is either your current or your previous telephone number?</ns2:QuestionText><ns2:AnswerChoice answerId=\"1\" correctAnswer=\"false\">404-427-9775</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"2\" correctAnswer=\"false\">404-556-3817</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"3\" correctAnswer=\"false\">404-556-7533</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"4\" correctAnswer=\"true\">770-427-2181</ns2:AnswerChoice><ns2:AnswerChoice answerId=\"5\" correctAnswer=\"false\">NONE OF THE ABOVE</ns2:AnswerChoice></ns2:Question></Quiz></IdentityProofing></IdentityVerificationAndProofing></ProductResponses></InitialResponse></soap:Body></soap:Envelope>"
+    ,
+    "cookies": [],
+    "headers": [
+      {
+        "name": "Content-Type",
+        "values": "text/xml"
+      }
+    ],
+    "delay": {
+        "timeUnit": "MICROSECONDS",
+        "value": 2000
+    }
+ }, "times" : {"unlimited": true}
+
+});
 
 // Too many Attempts
 mockClient("localhost", 1080).mockAnyResponse(
@@ -132,7 +161,7 @@ mockClient("localhost", 1080).mockAnyResponse(
     "headers": [],
     "body": {
       "type": "XPATH",
-      "value": "//*[local-name()='InitialRequest']//*[local-name()='Address']//*[local-name()='ZIP'] = '40000'"
+      "value": "//*[local-name()='InitialRequest']//*[local-name()='Address']//*[local-name()='ZIP'] = '1136000000810008'"
     }
   },"httpResponse": {
     "statusCode": 200,
@@ -162,11 +191,41 @@ mockClient("localhost", 1080).mockAnyResponse(
     "headers": [],
     "body": {
       "type": "XPATH",
-      "value": "//*[local-name()='SubsequentRequest']"
+      "value": "//*[local-name()='SubsequentRequest'][@transactionKey='1136000000770022']"
     }
   },"httpResponse": {
     "statusCode": 200,
     "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><SubsequentResponse xmlns=\"http://eid.equifax.com/soap/schema/usidentityfraudservice/v2\" xmlns:ns2=\"http://eid.equifax.com/soap/schema/identityfraudservice/v2\" transactionKey=\"1136000000770022\" transactionStatus=\"COMPLETED\"><ProductResponses><IdentityVerificationAndProofing productStatus=\"COMPLETED\"><IdentityVerification><VerificationAssessment><Scores><IdentityScore>886</IdentityScore></Scores><Detail><ns2:Name>MatchAssessment</ns2:Name><ns2:Value>D</ns2:Value></Detail><Detail><ns2:Name>FraudIndicator</ns2:Name><ns2:Value></ns2:Value></Detail></VerificationAssessment></IdentityVerification><IdentityProofing><ProofingAssessment><Scores><InteractiveQueryScore>35</InteractiveQueryScore></Scores></ProofingAssessment></IdentityProofing><OverallScore>6</OverallScore><Reason><Code>18</Code></Reason><Reason><Code>48</Code></Reason><Reason><Code>4F</Code></Reason><Reason><Code>4L</Code></Reason><Reason><Code>4N</Code></Reason><Reason><Code>4S</Code></Reason><Reason><Code>6P</Code></Reason><Reason><Code>A6</Code></Reason><Reason><Code>AY</Code></Reason><Reason><Code>NC</Code></Reason><Reason><Code>P5</Code></Reason><Reason><Code>T2</Code></Reason><Decision>Y</Decision></IdentityVerificationAndProofing></ProductResponses><ReferenceData><Detail><ns2:Name>CustomerID</ns2:Name><ns2:Value>test</ns2:Value></Detail></ReferenceData></SubsequentResponse></soap:Body></soap:Envelope>"
+    ,
+    "cookies": [],
+    "headers": [
+      {
+        "name": "Content-Type",
+        "values": "text/xml"
+      }
+    ],
+    "delay": {
+        "timeUnit": "MICROSECONDS",
+        "value": 1000
+    }
+ }, "times" : {"unlimited": true}
+
+});
+
+// Failed Quiz
+mockClient("localhost", 1080).mockAnyResponse(
+{
+  "httpRequest": {
+    "method": "POST",
+    "path": "/usidentityfraudservicev2",
+    "headers": [],
+    "body": {
+      "type": "XPATH",
+      "value": "//*[local-name()='SubsequentRequest'][@transactionKey='1122334455667788']"
+    }
+  },"httpResponse": {
+    "statusCode": 200,
+    "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><SubsequentResponse xmlns=\"http://eid.equifax.com/soap/schema/usidentityfraudservice/v2\" xmlns:ns2=\"http://eid.equifax.com/soap/schema/identityfraudservice/v2\" transactionKey=\"1122334455667788\" transactionStatus=\"COMPLETED\"><ProductResponses><IdentityVerificationAndProofing productStatus=\"COMPLETED\"><IdentityVerification><VerificationAssessment><Scores><IdentityScore>886</IdentityScore></Scores><Detail><ns2:Name>MatchAssessment</ns2:Name><ns2:Value>D</ns2:Value></Detail><Detail><ns2:Name>FraudIndicator</ns2:Name><ns2:Value></ns2:Value></Detail></VerificationAssessment></IdentityVerification><IdentityProofing><ProofingAssessment><Scores><InteractiveQueryScore>35</InteractiveQueryScore></Scores></ProofingAssessment></IdentityProofing><OverallScore>6</OverallScore><Reason><Code>18</Code></Reason><Reason><Code>48</Code></Reason><Reason><Code>4F</Code></Reason><Reason><Code>4L</Code></Reason><Reason><Code>4N</Code></Reason><Reason><Code>4S</Code></Reason><Reason><Code>6P</Code></Reason><Reason><Code>A6</Code></Reason><Reason><Code>AY</Code></Reason><Reason><Code>NC</Code></Reason><Reason><Code>P5</Code></Reason><Reason><Code>T2</Code></Reason><Decision>N</Decision></IdentityVerificationAndProofing></ProductResponses><ReferenceData><Detail><ns2:Name>CustomerID</ns2:Name><ns2:Value>test</ns2:Value></Detail></ReferenceData></SubsequentResponse></soap:Body></soap:Envelope>"
     ,
     "cookies": [],
     "headers": [
