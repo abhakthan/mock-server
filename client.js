@@ -1,6 +1,9 @@
 var mockServerClient = require('mockserver-client');
 var mockClient = mockServerClient.mockServerClient;
-/*
+
+mockClient("localhost", 1080).mockSimpleResponse('/test', { name: 'test' }, 203);
+
+
 mockClient("localhost", 1080).mockAnyResponse(
 {
   "httpRequest": {
@@ -9,10 +12,10 @@ mockClient("localhost", 1080).mockAnyResponse(
     "headers": [],
     "body": {
       "type": "XPATH",
-      "value": "//*[local-name()='InitialRequest']"
+      "value": "//*[local-name()='InitialRequest']//*[local-name()='Address']//*[local-name()='ZIP'] = '00000'"
     }
   },"httpResponse": {
-    "statusCode": 403,
+    "statusCode": 500,
     "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><soap:Fault><faultcode xmlns:ns1=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">ns1:InvalidSecurity</faultcode><faultstring>An error was discovered processing the &lt;wsse:Security> header</faultstring></soap:Fault></soap:Body></soap:Envelope>",
     "cookies": [],
     "headers": [
@@ -28,9 +31,8 @@ mockClient("localhost", 1080).mockAnyResponse(
  }, "times" : {"unlimited": true}
 
 });
-*/
 
-
+// Soap Error
 mockClient("localhost", 1080).mockAnyResponse(
 {
   "httpRequest": {
@@ -39,7 +41,37 @@ mockClient("localhost", 1080).mockAnyResponse(
     "headers": [],
     "body": {
       "type": "XPATH",
-      "value": "//*[local-name()='InitialRequest']"
+      "value": "//*[local-name()='InitialRequest']//*[local-name()='Address']//*[local-name()='ZIP'] = '10000'"
+    }
+  },"httpResponse": {
+    "statusCode": 200,
+    "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><InitialResponse xmlns=\"http://eid.equifax.com/soap/schema/usidentityfraudservice/v2\" xmlns:ns2=\"http://eid.equifax.com/soap/schema/identityfraudservice/v2\" transactionKey=\"1136000000800125\"><Error><ns2:Code>01</ns2:Code><ns2:Message>Invalid input errors</ns2:Message><ns2:InvalidInput><ns2:FieldInErrorXPath>/InitialRequest/Identity/Name/FirstName</ns2:FieldInErrorXPath></ns2:InvalidInput></Error></InitialResponse></soap:Body></soap:Envelope>"
+    ,
+    "cookies": [],
+    "headers": [
+      {
+        "name": "Content-Type",
+        "values": "text/xml"
+      }
+    ],
+    "delay": {
+        "timeUnit": "MICROSECONDS",
+        "value": 2000
+    }
+ }, "times" : {"unlimited": true}
+
+});
+
+// Get Questions (Successful)
+mockClient("localhost", 1080).mockAnyResponse(
+{
+  "httpRequest": {
+    "method": "POST",
+    "path": "/usidentityfraudservicev2",
+    "headers": [],
+    "body": {
+      "type": "XPATH",
+      "value": "//*[local-name()='InitialRequest']//*[local-name()='Address']//*[local-name()='ZIP'] = '20000'"
     }
   },"httpResponse": {
     "statusCode": 200,
@@ -61,6 +93,67 @@ mockClient("localhost", 1080).mockAnyResponse(
 });
 
 
+// Too many Attempts
+mockClient("localhost", 1080).mockAnyResponse(
+{
+  "httpRequest": {
+    "method": "POST",
+    "path": "/usidentityfraudservicev2",
+    "headers": [],
+    "body": {
+      "type": "XPATH",
+      "value": "//*[local-name()='InitialRequest']//*[local-name()='Address']//*[local-name()='ZIP'] = '30000'"
+    }
+  },"httpResponse": {
+    "statusCode": 200,
+    "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><InitialResponse transactionKey=\"1136000000740026\" xmlns=\"http://eid.equifax.com/soap/schema/usidentityfraudservice/v2\" xmlns:ns2=\"http://eid.equifax.com/soap/schema/identityfraudservice/v2\"><ProductResponses><IdentityVerificationAndProofing productStatus=\"COMPLETED\"><IdentityVerification><Error><ns2:Code>1004</ns2:Code></Error></IdentityVerification><IdentityProofing><Error><ns2:Code>1004</ns2:Code></Error></IdentityProofing><Reason><Code>07</Code></Reason><Reason><Code>10</Code></Reason><Reason><Code>P5</Code></Reason></IdentityVerificationAndProofing></ProductResponses><ReferenceData><Detail><ns2:Name>CustomerID</ns2:Name><ns2:Value>test</ns2:Value></Detail></ReferenceData></InitialResponse></soap:Body></soap:Envelope>"
+    ,
+    "cookies": [],
+    "headers": [
+      {
+        "name": "Content-Type",
+        "values": "text/xml"
+      }
+    ],
+    "delay": {
+        "timeUnit": "MICROSECONDS",
+        "value": 2000
+    }
+ }, "times" : {"unlimited": true}
+
+});
+
+// No Match
+mockClient("localhost", 1080).mockAnyResponse(
+{
+  "httpRequest": {
+    "method": "POST",
+    "path": "/usidentityfraudservicev2",
+    "headers": [],
+    "body": {
+      "type": "XPATH",
+      "value": "//*[local-name()='InitialRequest']//*[local-name()='Address']//*[local-name()='ZIP'] = '40000'"
+    }
+  },"httpResponse": {
+    "statusCode": 200,
+    "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><InitialResponse xmlns=\"http://eid.equifax.com/soap/schema/usidentityfraudservice/v2\" xmlns:ns2=\"http://eid.equifax.com/soap/schema/identityfraudservice/v2\" transactionKey=\"1136000000830119\" transactionStatus=\"COMPLETED\"><ProductResponses><IdentityVerificationAndProofing productStatus=\"COMPLETED\"><IdentityVerification><VerificationAssessment><Scores/><Detail><ns2:Name>FraudIndicator</ns2:Name><ns2:Value>W</ns2:Value></Detail></VerificationAssessment></IdentityVerification><IdentityProofing><ProofingAssessment/></IdentityProofing><OverallScore>0</OverallScore><Reason><Code>45</Code></Reason><Reason><Code>47</Code></Reason><Reason><Code>4F</Code></Reason><Reason><Code>4L</Code></Reason><Reason><Code>4N</Code></Reason><Reason><Code>89</Code></Reason><Reason><Code>A6</Code></Reason><Reason><Code>G8</Code></Reason><Reason><Code>NH</Code></Reason><Decision>N</Decision></IdentityVerificationAndProofing></ProductResponses></InitialResponse></soap:Body></soap:Envelope>"
+    ,
+    "cookies": [],
+    "headers": [
+      {
+        "name": "Content-Type",
+        "values": "text/xml"
+      }
+    ],
+    "delay": {
+        "timeUnit": "MICROSECONDS",
+        "value": 2000
+    }
+ }, "times" : {"unlimited": true}
+});
+
+
+// Successful Passed Quiz
 mockClient("localhost", 1080).mockAnyResponse(
 {
   "httpRequest": {
