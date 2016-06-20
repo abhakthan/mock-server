@@ -1,6 +1,6 @@
 var mockServer = require('mockserver-grunt');
 var mockServerClient = require('mockserver-client').mockServerClient;
-var HTTP_PORT = HTTP_PORT;
+var HTTP_PORT = 1080;
 var PROXY_PORT = 1090;
 
 mockServer.start_mockserver({
@@ -176,12 +176,11 @@ mockServer.start_mockserver({
       "headers": [],
       "body": {
         "type": "XPATH",
-        "value": "//*[local-name()='InitialRequest']//*[local-name()='Address']//*[local-name()='ZIP'] = '1136000000810008'"
+        "value": "//*[local-name()='InitialRequest']//*[local-name()='Address']//*[local-name()='ZIP'] = '40000'"
       }
     }, "httpResponse": {
       "statusCode": 200,
-      "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><InitialResponse xmlns=\"http://eid.equifax.com/soap/schema/usidentityfraudservice/v2\" xmlns:ns2=\"http://eid.equifax.com/soap/schema/identityfraudservice/v2\" transactionKey=\"1136000000830119\" transactionStatus=\"COMPLETED\"><ProductResponses><IdentityVerificationAndProofing productStatus=\"COMPLETED\"><IdentityVerification><VerificationAssessment><Scores/><Detail><ns2:Name>FraudIndicator</ns2:Name><ns2:Value>W</ns2:Value></Detail></VerificationAssessment></IdentityVerification><IdentityProofing><ProofingAssessment/></IdentityProofing><OverallScore>0</OverallScore><Reason><Code>45</Code></Reason><Reason><Code>47</Code></Reason><Reason><Code>4F</Code></Reason><Reason><Code>4L</Code></Reason><Reason><Code>4N</Code></Reason><Reason><Code>89</Code></Reason><Reason><Code>A6</Code></Reason><Reason><Code>G8</Code></Reason><Reason><Code>NH</Code></Reason><Decision>N</Decision></IdentityVerificationAndProofing></ProductResponses></InitialResponse></soap:Body></soap:Envelope>"
-      ,
+      "body": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><InitialResponse xmlns=\"http://eid.equifax.com/soap/schema/usidentityfraudservice/v2\" xmlns:ns2=\"http://eid.equifax.com/soap/schema/identityfraudservice/v2\" transactionKey=\"1136000000830119\" transactionStatus=\"COMPLETED\"><ProductResponses><IdentityVerificationAndProofing productStatus=\"COMPLETED\"><IdentityVerification><VerificationAssessment><Scores/><Detail><ns2:Name>FraudIndicator</ns2:Name><ns2:Value>W</ns2:Value></Detail></VerificationAssessment></IdentityVerification><IdentityProofing><ProofingAssessment/></IdentityProofing><OverallScore>0</OverallScore><Reason><Code>45</Code></Reason><Reason><Code>47</Code></Reason><Reason><Code>4F</Code></Reason><Reason><Code>4L</Code></Reason><Reason><Code>4N</Code></Reason><Reason><Code>89</Code></Reason><Reason><Code>A6</Code></Reason><Reason><Code>G8</Code></Reason><Reason><Code>NH</Code></Reason><Decision>N</Decision></IdentityVerificationAndProofing></ProductResponses></InitialResponse></soap:Body></soap:Envelope>",
       "cookies": [],
       "headers": [
         {
